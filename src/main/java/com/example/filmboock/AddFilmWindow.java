@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -15,7 +16,6 @@ import java.nio.channels.FileChannel;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.Arrays;
 
 
 //id image name year genre description actor collection
@@ -26,16 +26,18 @@ public class AddFilmWindow {
     TextField nameText = new TextField();
     TextField yearText = new TextField();
     TextArea genreText = new TextArea();
-    TextField descriptionText = new TextField();
+    TextArea descriptionText = new TextArea();
     TextArea actorText = new TextArea();
     TextField collectionText = new TextField();
     Button addFilmButton = new Button(Lang.ADD_FORM_FILM);
+    MenuButton menuAutocomplete = new MenuButton();
 
+    Pane textAutoCompletePane = new Pane(collectionText,menuAutocomplete);
     Label infoLabel = new Label();
 
     public AddFilmWindow() {
         VBox list = new VBox(imgButton, nameText,yearText,genreText,
-                descriptionText,actorText,collectionText,infoLabel,addFilmButton);
+                descriptionText,actorText,textAutoCompletePane,infoLabel,addFilmButton);
         list.setSpacing(10);
         list.setPadding(new Insets(10));
         list.setAlignment(Pos.CENTER);
@@ -46,8 +48,12 @@ public class AddFilmWindow {
         yearText.setPromptText(Lang.YEAR_PROMPT_TEXT);
         genreText.setPromptText(Lang.GENRE_PROMPT_TEXT);
         descriptionText.setPromptText(Lang.DESCRIPTION_PROMPT_TEXT);
+        descriptionText.setWrapText(true);
         actorText.setPromptText(Lang.ACTOR_PROMPT_TEXT);
         collectionText.setPromptText(Lang.COLLECTION_PROMPT_TEXT);
+        collectionText.setMinWidth(480);
+        collectionText.textProperty().addListener((observableValue, s, t1) -> addAutocompleteItems());
+        menuAutocomplete.setVisible(false);
 
         addFilmButton.setOnAction(event -> addFilmButtonEvent());
         imgButton.setOnAction(event -> openFileDialogImage());
@@ -64,6 +70,18 @@ public class AddFilmWindow {
         stage.setScene(scene);
         stage.show();
     }
+    private void addAutocompleteItems(){
+        menuAutocomplete.getItems().clear();
+        List<String> collections = base.getCollectionToValue(collectionText.getText());
+        for(String collectionName : collections){
+            MenuItem menuItemAutoCollection = new MenuItem(collectionName);
+            menuItemAutoCollection.setOnAction(actionEvent -> collectionText.setText(menuItemAutoCollection.getText()));
+            menuAutocomplete.getItems().add(menuItemAutoCollection);
+        }
+        if(!menuAutocomplete.getItems().isEmpty()){
+            menuAutocomplete.show();
+        }
+    }
     private void addFilmButtonEvent(){
         if(Objects.equals(imgButton.getText(), Lang.ADD_BUTTON_IMAGE)){
             infoLabel.setText(Lang.ERROR_NO_IMAGE_ADD);
@@ -77,6 +95,7 @@ public class AddFilmWindow {
         }
     }
     private void writeData(){
+        copyImaheInResource(copyOut, copyIn);
         List<String> genreList = List.of(genreText.getText().split(","));
         genreList = genreList.stream().map(String::trim)
                 .filter(e -> ! e.isEmpty())
@@ -89,6 +108,8 @@ public class AddFilmWindow {
                 descriptionText.getText().trim(),actorList,collectionText.getText().trim());
     }
     File startDirectory;
+    File copyOut = null;
+    File copyIn = null;
     private void openFileDialogImage() {
         Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -97,15 +118,14 @@ public class AddFilmWindow {
                 "*.jpg");
         fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setInitialDirectory(startDirectory);
-        File file = fileChooser.showOpenDialog(stage);
+        copyOut = fileChooser.showOpenDialog(stage);
 
-        if (file != null) {
-            String path = PATH_IMAGE + file.getName();
+        if (copyOut != null) {
+            String path = PATH_IMAGE + copyOut.getName();
             if (!isExistFile(path)) {
-                File copied = new File(path);
-                startDirectory = new File(file.getParent());
-                imgButton.setText(file.getName());
-                copyFileUsingChannel(file, copied);
+                copyIn = new File(path);
+                startDirectory = new File(copyOut.getParent());
+                imgButton.setText(copyOut.getName());
             } else {
                 infoLabel.setText(Lang.ERROR_IMAGE_ADD);
             }
@@ -114,7 +134,7 @@ public class AddFilmWindow {
     private boolean isExistFile(String path) {
         return new File(path).exists();
     }
-    private void copyFileUsingChannel(File source, File dest) {
+    private void copyImaheInResource(File source, File dest) {
         FileChannel sourceChannel = null;
         FileChannel destChannel = null;
         try {

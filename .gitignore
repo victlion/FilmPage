@@ -4,6 +4,10 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+mvnw
+mvnw.cmd
+.idea/
+.mvn/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml

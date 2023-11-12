@@ -10,7 +10,6 @@ public class Start extends Application {
     public void start(Stage stage) throws IOException {
         HomeWindow homeWindow = new HomeWindow();
         homeWindow.openHomeWindow();
-//        FilmPage filmPage = new FilmPage(1);
     }
 
     public static void main(String[] args) {

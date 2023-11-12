@@ -129,7 +129,15 @@ public class Base {
         });
         return result;
     }
-
+    public List<String> getCollectionToValue(String value){
+        List<String> result = new ArrayList<>();
+        for (String collections : collectionList.keySet()){
+            if(collections.toLowerCase().contains(value.toLowerCase().trim()) && !value.isEmpty()){
+                result.add(collections);
+            }
+        }
+        return result;
+    }
 
     private void addMapInfo(List<String> list,Map<String,String> map){
         for(String genre: list){
