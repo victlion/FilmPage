@@ -4,6 +4,7 @@ import com.example.filmboock.base.Base;
 import com.example.filmboock.base.Film;
 import com.example.filmboock.base.Lang;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -11,24 +12,28 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Flow;
 
 public class FilmPage {
+    private static final String PATH_IMAGE_EDIT = "DATA/Images/System/edit.png";
+    private static final String PATH_IMAGE_DEL = "DATA/Images/System/delete.png";
     Base base = new Base();
     HBox content = new HBox();
     HomeWindow homeWindow;
+    Stage stage = new Stage();
     public FilmPage(int id,HomeWindow homeWindow) {
         this.homeWindow = homeWindow;
         FilmPageStart(id);
     }
     private void FilmPageStart(int id){
         Scene scene = new Scene(content,850,450);
-        Stage stage = new Stage();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -40,7 +45,8 @@ public class FilmPage {
         content.setSpacing(20);
         //
 //id image name year genre description actor collection
-        Label nameFilm = new Label(film.getName());
+        //Label nameFilm = new Label(film.getName());
+        HBox nameFilm = getNameEditDeleteFilm(film.getName(), film.getId());
         Label yearFilm = new Label(film.getYear());
         FlowPane genreButtonPanel = new FlowPane(getGenreButtons(film));
         Accordion accordionDescription = getAccordionDescription(film);
@@ -56,6 +62,34 @@ public class FilmPage {
 
         content.getChildren().addAll(getPosterImage(film),scrollPaneContent);
 
+    }
+    private HBox getNameEditDeleteFilm(String name,int id){
+        ImageView editImageView = null;
+        ImageView delImageView = null;
+        try {
+            FileInputStream imageFileEdit = new FileInputStream(PATH_IMAGE_EDIT);
+            FileInputStream imageFileDel = new FileInputStream(PATH_IMAGE_DEL);
+            Image imageEdit = new Image(imageFileEdit);
+            Image imageDel = new Image(imageFileDel);
+            editImageView = new ImageView(imageEdit);
+            editImageView.setFitHeight(20);
+            editImageView.setFitWidth(20);
+            delImageView = new ImageView(imageDel);
+            delImageView.setFitWidth(20);
+            delImageView.setFitHeight(20);
+        }catch (IOException ex){}
+
+        Button buttonEdit = new Button();
+        buttonEdit.setGraphic(editImageView);
+        Button buttonDel = new Button();
+        buttonDel.setOnAction(actionEvent -> deletePageFilm(id,name));
+        buttonDel.setGraphic(delImageView);
+        HBox buttons = new HBox(buttonEdit,buttonDel);
+        buttons.setSpacing(10);
+        buttons.setPadding(new Insets(0,0,0,10));
+
+        HBox result = new HBox(new Label(name),buttons);
+        return result;
     }
     private Button[] getGenreButtons(Film film){
         Button[] genreButtons = new Button[film.getGenre().size()];
@@ -116,5 +150,22 @@ public class FilmPage {
             result[i] = posterCollectionButton;
         }
         return result;
+    }
+    private void deletePageFilm(int id,String name){
+        Button buttonDelete = new Button(Lang.CONFIRM_DELETE + name);
+        buttonDelete.setWrapText(true);
+        buttonDelete.setTextAlignment(TextAlignment.CENTER);
+        Scene sceneDelete = new Scene(buttonDelete,250,100);
+        Stage stageDeletePage = new Stage();
+        stageDeletePage.setScene(sceneDelete);
+        stageDeletePage.setResizable(false);
+        buttonDelete.setOnAction(actionEvent -> {
+            base.removeFilm(id);
+            homeWindow.setContentFilm(base.getAllFilms());
+            homeWindow.base = new Base();
+            stage.close();
+            stageDeletePage.close();
+        });
+        stageDeletePage.show();
     }
 }

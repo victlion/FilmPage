@@ -34,8 +34,10 @@ public class AddFilmWindow {
 
     Pane textAutoCompletePane = new Pane(collectionText,menuAutocomplete);
     Label infoLabel = new Label();
+    HomeWindow homeWindow = null;
 
-    public AddFilmWindow() {
+    public AddFilmWindow(HomeWindow homeWindow) {
+        this.homeWindow = homeWindow;
         VBox list = new VBox(imgButton, nameText,yearText,genreText,
                 descriptionText,actorText,textAutoCompletePane,infoLabel,addFilmButton);
         list.setSpacing(10);
@@ -106,6 +108,16 @@ public class AddFilmWindow {
                 .collect(Collectors.toList());
         base.writer(PATH_IMAGE+imgButton.getText(),nameText.getText().trim(), yearText.getText().trim(),genreList,
                 descriptionText.getText().trim(),actorList,collectionText.getText().trim());
+        imgButton.setText(Lang.ADD_BUTTON_IMAGE);
+        nameText.setText("");
+        yearText.setText("");
+        genreText.setText("");
+        descriptionText.setText("");
+        actorText.setText("");
+        collectionText.setText("");
+        infoLabel.setText(Lang.FILM_ADD_SUCCESS);
+        homeWindow.base = new Base();
+        homeWindow.setContentFilm(base.getAllFilms());
     }
     File startDirectory;
     File copyOut = null;

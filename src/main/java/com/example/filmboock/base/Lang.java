@@ -21,4 +21,6 @@ public class Lang {
     //
     public static final String DESCRIPTION = "Описание";
 
+    public static final String CONFIRM_DELETE = "Подтвердить удаление фильма : ";
+    public static final String FILM_ADD_SUCCESS = "Фильм добавлен";
 }

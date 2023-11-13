@@ -113,6 +113,6 @@ public class HomeWindow {
     }
 
     private void openWindowAddFilm() {
-        AddFilmWindow addFilmWindow = new AddFilmWindow();
+        AddFilmWindow addFilmWindow = new AddFilmWindow(this);
     }
 }
