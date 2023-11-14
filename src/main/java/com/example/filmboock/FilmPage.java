@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -24,22 +25,25 @@ import java.util.concurrent.Flow;
 public class FilmPage {
     private static final String PATH_IMAGE_EDIT = "DATA/Images/System/edit.png";
     private static final String PATH_IMAGE_DEL = "DATA/Images/System/delete.png";
-    Base base = new Base();
     HBox content = new HBox();
     HomeWindow homeWindow;
+    Base base = new Base();
     Stage stage = new Stage();
+    double w = 850;
+    double h = 450;
     public FilmPage(int id,HomeWindow homeWindow) {
         this.homeWindow = homeWindow;
         FilmPageStart(id);
     }
     private void FilmPageStart(int id){
-        Scene scene = new Scene(content,850,450);
+        Scene scene = new Scene(content,w,h);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
         setContent(base.getFilmToId(id));
     }
     private void setContent(Film film){
+        content.getChildren().clear();
         //config
         content.setPadding(new Insets(20));
         content.setSpacing(20);
@@ -81,6 +85,7 @@ public class FilmPage {
 
         Button buttonEdit = new Button();
         buttonEdit.setGraphic(editImageView);
+        buttonEdit.setOnAction(actionEvent -> new EditPage(this,w,h,id,homeWindow));
         Button buttonDel = new Button();
         buttonDel.setOnAction(actionEvent -> deletePageFilm(id,name));
         buttonDel.setGraphic(delImageView);

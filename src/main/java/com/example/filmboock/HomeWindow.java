@@ -16,6 +16,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +34,7 @@ public class HomeWindow {
         stage.setMaximized(true);
         stage.setTitle("Hello!");
         stage.setScene(scene);
-        stage.setOnCloseRequest(windowEvent -> System.exit(0));
+        stage.setOnCloseRequest(windowEvent -> closeApplication());
         stage.show();
         //
         setMenu();
@@ -91,7 +94,7 @@ public class HomeWindow {
         }
         //Config
         MenuItem openWindowAddFilmItem = new MenuItem(Lang.MENU_ADD_FILM);
-        openWindowAddFilmItem.setOnAction(actionEvent -> openWindowAddFilm());
+        openWindowAddFilmItem.setOnAction(actionEvent -> new AddFilmWindow(this));
         menuAddFilm.getItems().add(openWindowAddFilmItem);
         //
         MenuBar menuBar = new MenuBar(menuGenre, menuYear, menuAddFilm);
@@ -111,8 +114,7 @@ public class HomeWindow {
         dropMenu.setSpacing(10);
         content.getChildren().add(dropMenu);
     }
-
-    private void openWindowAddFilm() {
-        AddFilmWindow addFilmWindow = new AddFilmWindow(this);
+    private void closeApplication(){
+        System.exit(0);
     }
 }

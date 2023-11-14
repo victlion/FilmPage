@@ -1,5 +1,6 @@
 package com.example.filmboock.base;
 
+import com.example.filmboock.HomeWindow;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +27,7 @@ public class Base {
     private Map<String, String> yearList = new HashMap<>();
     private Map<String, String> collectionList = new HashMap<>();
     private int startId = 0;
+    HomeWindow homeWindow = null;
 
     public Base() {
         loadBase();
@@ -34,14 +36,34 @@ public class Base {
         yearList = loadMap(PATH_YEAR);
         collectionList = loadMap(PATH_COLLECTION);
     }
-
     //id image name year genre description actor collection
     public void writer(String image, String name, String year, List<String> genre,
                        String description, List<String> actor, String collection) {
         Film newFilm = new Film(startId, name, image, year, genre, description, actor, collection);
         filmList.add(newFilm);
-        fileWrite(PATH_DATA, filmList);
+        reWriteFile(genre,actor,year,collection);
         startId++;
+    }
+    public void reWriteFilm(int id, String image, String name, String year, List<String> genre,
+                        String description, List<String> actor, String collection){
+        int indexFilm = 0;
+        for(Film film:filmList){
+            if(film.getId()==id){
+                indexFilm = film.getId();
+                break;
+            }
+        }
+        filmList.get(indexFilm).setImage(image);
+        filmList.get(indexFilm).setName(name);
+        filmList.get(indexFilm).setYear(year);
+        filmList.get(indexFilm).setGenre(genre);
+        filmList.get(indexFilm).setDescription(description);
+        filmList.get(indexFilm).setActor(actor);
+        filmList.get(indexFilm).setCollection(collection);
+        reWriteFile(genre,actor,year,collection);
+    }
+    private void reWriteFile(List<String> genre,List<String> actor,String year,String collection){
+        fileWrite(PATH_DATA, filmList);
         //addGenre
         addMapInfo(genre, genreList);
         fileWrite(PATH_GENRE, genreList);
@@ -185,7 +207,7 @@ public class Base {
             fileWrite(PATH_ACTOR, actorList);
             fileWrite(PATH_YEAR, yearList);
             fileWrite(PATH_COLLECTION, collectionList);
-            fileImg.deleteOnExit();
+
         }
     }
     private void addMapInfo(List<String> list, Map<String, String> map) {
