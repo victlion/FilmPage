@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Base {
     private final static String PATH_DATA = "DATA/base.json";
@@ -36,20 +37,22 @@ public class Base {
         yearList = loadMap(PATH_YEAR);
         collectionList = loadMap(PATH_COLLECTION);
     }
+
     //id image name year genre description actor collection
     public void writer(String image, String name, String year, List<String> genre,
                        String description, List<String> actor, String collection) {
         Film newFilm = new Film(startId, name, image, year, genre, description, actor, collection);
         filmList.add(newFilm);
-        reWriteFile(genre,actor,year,collection);
+        reWriteFile(genre, actor, year, collection);
         startId++;
     }
+
     public void reWriteFilm(int id, String image, String name, String year, List<String> genre,
-                        String description, List<String> actor, String collection){
+                            String description, List<String> actor, String collection) {
         int indexFilm = 0;
-        for(Film film:filmList){
-            if(film.getId()==id){
-                indexFilm = film.getId();
+        for (int i = 0; i < filmList.size(); i++) {
+            if(filmList.get(i).getId() == id){
+                indexFilm = i;
                 break;
             }
         }
@@ -60,9 +63,10 @@ public class Base {
         filmList.get(indexFilm).setDescription(description);
         filmList.get(indexFilm).setActor(actor);
         filmList.get(indexFilm).setCollection(collection);
-        reWriteFile(genre,actor,year,collection);
+        reWriteFile(genre, actor, year, collection);
     }
-    private void reWriteFile(List<String> genre,List<String> actor,String year,String collection){
+
+    private void reWriteFile(List<String> genre, List<String> actor, String year, String collection) {
         fileWrite(PATH_DATA, filmList);
         //addGenre
         addMapInfo(genre, genreList);
@@ -82,12 +86,21 @@ public class Base {
         return filmList;
     }
 
+    public List<String> getAllImage() {
+        List<String> imageList = new ArrayList<>();
+        for (Film film : filmList) {
+            imageList.add(film.getImage());
+        }
+        return imageList;
+    }
+
     public Map<String, String> getGenreList() {
         return genreList;
     }
 
-    public Map<String, String> getYearList() {
-        return yearList;
+    public List<String> getYearList() {
+        return yearList.keySet().stream().sorted()
+                .collect(Collectors.toList());
     }
 
     public List<Film> getFilmToGenre(String genre) {
@@ -185,31 +198,31 @@ public class Base {
         yearList = new HashMap<>();
         int removeId = -1;
         for (int i = 0; i < filmList.size(); i++) {
-            if(filmList.get(i).getId()==id){
+            if (filmList.get(i).getId() == id) {
                 removeId = i;
                 fileImg = new File(filmList.get(i).getImage());
             }
-            if(filmList.get(i).getId()!=id){
-                collectionList.put(filmList.get(i).getCollection(),"");
-                yearList.put(filmList.get(i).getYear(),"");
-                for(String genres:filmList.get(i).getGenre()){
-                    genreList.put(genres,"");
+            if (filmList.get(i).getId() != id) {
+                collectionList.put(filmList.get(i).getCollection(), "");
+                yearList.put(filmList.get(i).getYear(), "");
+                for (String genres : filmList.get(i).getGenre()) {
+                    genreList.put(genres, "");
                 }
-                for(String actors:filmList.get(i).getActor()){
-                    actorList.put(actors,"");
+                for (String actors : filmList.get(i).getActor()) {
+                    actorList.put(actors, "");
                 }
             }
         }
-        if(removeId>=0) {
+        if (removeId >= 0) {
             filmList.remove(removeId);
             fileWrite(PATH_DATA, filmList);
             fileWrite(PATH_GENRE, genreList);
             fileWrite(PATH_ACTOR, actorList);
             fileWrite(PATH_YEAR, yearList);
             fileWrite(PATH_COLLECTION, collectionList);
-
         }
     }
+
     private void addMapInfo(List<String> list, Map<String, String> map) {
         for (String genre : list) {
             map.put(genre, "");
@@ -217,7 +230,7 @@ public class Base {
     }
 
     private void addMapInfo(String value, Map<String, String> map) {
-        if(!value.isEmpty()) {
+        if (!value.isEmpty()) {
             map.put(value, "");
         }
     }

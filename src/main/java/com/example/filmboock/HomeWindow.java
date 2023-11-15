@@ -19,10 +19,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HomeWindow {
+    private static final String PATH_IMAGE = "DATA/Images";
     Base base = new Base();
     VBox content = new VBox();
     FlowPane contentFilm = new FlowPane();
@@ -43,6 +46,8 @@ public class HomeWindow {
         content.getChildren().add(scrollcontentFilm);
         List<Film> listFilm = base.getAllFilms();
         setContentFilm(listFilm);
+        //
+        cleaner();
     }
 
     public void setContentFilm(List<Film> films) {
@@ -81,13 +86,13 @@ public class HomeWindow {
 
         //addMenu
         Map<String, String> genreList = base.getGenreList();
-        Map<String, String> yearList = base.getYearList();
+        List<String> yearList = base.getYearList();
         for (String genre : genreList.keySet()) {
             MenuItem newItemGenre = new MenuItem(genre);
             newItemGenre.setOnAction(actionEvent -> setContentFilm(base.getFilmToGenre(newItemGenre.getText())));
             menuGenre.getItems().add(newItemGenre);
         }
-        for (String year : yearList.keySet()) {
+        for (String year : yearList) {
             MenuItem newItemYear = new MenuItem(year);
             newItemYear.setOnAction(actionEvent -> setContentFilm(base.getFilmToYear(newItemYear.getText())));
             menuYear.getItems().add(newItemYear);
@@ -114,7 +119,32 @@ public class HomeWindow {
         dropMenu.setSpacing(10);
         content.getChildren().add(dropMenu);
     }
-    private void closeApplication(){
+
+    private void closeApplication() {
         System.exit(0);
+    }
+
+    private void cleaner() {
+        List<File> deleteFileList = new ArrayList<>();
+
+        File dir = new File(PATH_IMAGE);
+        File[] arrFiles = dir.listFiles();
+        List<File> lst = Arrays.asList(arrFiles);
+        List<String> imageThis = base.getAllImage().stream()
+                .map(e -> e.replace("/","\\"))
+                .collect(Collectors.toList());
+
+        for(File listFileDir:lst){
+           if(!imageThis.contains(listFileDir.getPath()) && listFileDir.isFile()){
+               deleteFileList.add(listFileDir);
+           }
+        }
+        for(File fileImgDel : deleteFileList){
+            try {
+                Files.delete(Path.of(fileImgDel.getPath()));
+            }catch (IOException ex) {
+                System.out.println(ex);
+            }
+        }
     }
 }

@@ -49,7 +49,6 @@ public class FilmPage {
         content.setSpacing(20);
         //
 //id image name year genre description actor collection
-        //Label nameFilm = new Label(film.getName());
         HBox nameFilm = getNameEditDeleteFilm(film.getName(), film.getId());
         Label yearFilm = new Label(film.getYear());
         FlowPane genreButtonPanel = new FlowPane(getGenreButtons(film));
