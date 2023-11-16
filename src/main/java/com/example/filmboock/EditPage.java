@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class EditPage {
     private static final String PATH_IMAGE = "DATA/Images/";
-    private static final String PATH_IMAGE_SAVE = "DATA/Images/System/save.png";
+    private static final String PATH_IMAGE_SAVE = "DATA/System/save.png";
     TextField nameText = new TextField();
     TextField yearText = new TextField();
     TextArea genreText = new TextArea();

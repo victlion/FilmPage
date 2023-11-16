@@ -134,16 +134,18 @@ public class HomeWindow {
                 .map(e -> e.replace("/","\\"))
                 .collect(Collectors.toList());
 
-        for(File listFileDir:lst){
-           if(!imageThis.contains(listFileDir.getPath()) && listFileDir.isFile()){
-               deleteFileList.add(listFileDir);
-           }
-        }
-        for(File fileImgDel : deleteFileList){
-            try {
-                Files.delete(Path.of(fileImgDel.getPath()));
-            }catch (IOException ex) {
-                System.out.println(ex);
+        if(lst.size() != imageThis.size()) {
+            for (File listFileDir : lst) {
+                if (!imageThis.contains(listFileDir.getPath()) && listFileDir.isFile()) {
+                    deleteFileList.add(listFileDir);
+                }
+            }
+            for (File fileImgDel : deleteFileList) {
+                try {
+                    Files.delete(Path.of(fileImgDel.getPath()));
+                } catch (IOException ex) {
+                    System.out.println(ex);
+                }
             }
         }
     }

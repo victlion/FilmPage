@@ -23,8 +23,8 @@ import java.util.Scanner;
 import java.util.concurrent.Flow;
 
 public class FilmPage {
-    private static final String PATH_IMAGE_EDIT = "DATA/Images/System/edit.png";
-    private static final String PATH_IMAGE_DEL = "DATA/Images/System/delete.png";
+    private static final String PATH_IMAGE_EDIT = "DATA/System/edit.png";
+    private static final String PATH_IMAGE_DEL = "DATA/System/delete.png";
     HBox content = new HBox();
     HomeWindow homeWindow;
     Base base = new Base();
