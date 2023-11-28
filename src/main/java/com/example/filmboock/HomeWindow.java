@@ -1,8 +1,6 @@
 package com.example.filmboock;
 
-import com.example.filmboock.base.Base;
-import com.example.filmboock.base.Film;
-import com.example.filmboock.base.Lang;
+import com.example.filmboock.base.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,6 +11,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -100,7 +100,25 @@ public class HomeWindow {
         //Config
         MenuItem openWindowAddFilmItem = new MenuItem(Lang.MENU_ADD_FILM);
         openWindowAddFilmItem.setOnAction(actionEvent -> new AddFilmWindow(this));
-        menuAddFilm.getItems().add(openWindowAddFilmItem);
+        MenuItem exportItem = new MenuItem(Lang.EXPORT);
+        exportItem.setOnAction(actionEvent -> {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            Stage primaryStage = new Stage();
+            File selectedDirectory = directoryChooser.showDialog(primaryStage);
+            new ExportBase(selectedDirectory.getAbsolutePath());
+        });
+
+        MenuItem importItem = new MenuItem(Lang.IMPORT);
+        importItem.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File selectFile = fileChooser.showOpenDialog(new Stage());
+            if(selectFile != null){
+                new ImportBase(selectFile);
+            }
+        });
+
+        menuAddFilm.getItems().addAll(openWindowAddFilmItem,exportItem,importItem);
         //
         MenuBar menuBar = new MenuBar(menuGenre, menuYear, menuAddFilm);
         //
