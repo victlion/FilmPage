@@ -5,11 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -259,16 +257,9 @@ public class Base {
 
     private Map<String, String> loadMap(String path) {
         File fileData = new File(path);
-        StringBuilder textFileData = new StringBuilder();
-
-        try (FileInputStream fis = new FileInputStream(fileData);
-             Scanner scanner = new Scanner(fis)
-        ) {
-            while (scanner.hasNext()) {
-                textFileData.append(scanner.nextLine()).append("\n");
-            }
-            if (textFileData.toString().length() > 0) {
-                return new Gson().fromJson(textFileData.toString(), Map.class);
+        try (java.io.Reader reader = new InputStreamReader(new FileInputStream(fileData), StandardCharsets.UTF_8)) {
+            if (!reader.toString().isEmpty()) {
+                return new Gson().fromJson(reader, Map.class);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -278,19 +269,12 @@ public class Base {
 
     private void loadBase() {
         File fileData = new File(PATH_DATA);
-        StringBuilder textFileData = new StringBuilder();
 
-        try (FileInputStream fis = new FileInputStream(fileData);
-             Scanner scanner = new Scanner(fis)
-        ) {
-            while (scanner.hasNext()) {
-                textFileData.append(scanner.nextLine()).append("\n");
-            }
-            if (textFileData.toString().length() > 0) {
-
+        try (java.io.Reader reader = new InputStreamReader(new FileInputStream(fileData), StandardCharsets.UTF_8)) {
+            if (!reader.toString().isEmpty()) {
                 Type listOfMyClassObject = new TypeToken<ArrayList<Film>>() {
                 }.getType();
-                filmList = new Gson().fromJson(textFileData.toString(), listOfMyClassObject);
+                filmList = new Gson().fromJson(reader, listOfMyClassObject);
                 for (Film film : filmList) {
                     if (film.id > startId) {
                         startId = film.id;
