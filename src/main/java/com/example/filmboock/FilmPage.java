@@ -4,7 +4,6 @@ import com.example.filmboock.base.Base;
 import com.example.filmboock.base.Film;
 import com.example.filmboock.base.Lang;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -15,16 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.Flow;
 
 public class FilmPage {
-    private static final String PATH_IMAGE_EDIT = "DATA/System/edit.png";
-    private static final String PATH_IMAGE_DEL = "DATA/System/delete.png";
+    private static final String PATH_IMAGE_EDIT = "src/main/resources/System/edit.png";
+    private static final String PATH_IMAGE_DEL = "src/main/resources/System/delete.png";
     HBox content = new HBox();
     HomeWindow homeWindow;
     Base base = new Base();

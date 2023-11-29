@@ -13,7 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ExportBase {
-    private final String[] EXPORT_FILES = {"DATA","DATA/Images"};
+    private final String[] EXPORT_FILES = {"src/main/resources","src/main/resources/Images"};
     private String EXPORT_PATH = "\\archive.zip";
     public ExportBase(String path){
         EXPORT_PATH = path + EXPORT_PATH;

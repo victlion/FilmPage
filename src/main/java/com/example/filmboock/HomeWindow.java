@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HomeWindow {
-    private static final String PATH_IMAGE = "DATA/Images";
+    private static final String PATH_IMAGE = "src/main/resources/Images";
     Base base = new Base();
     VBox content = new VBox();
     FlowPane contentFilm = new FlowPane();

@@ -1,14 +1,12 @@
 package com.example.filmboock.base;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class ImportBase {
-    private String zipFilePath = "DATA/archive.zip";
-    private String[] destDirectory = {"DATA","DATA/Images"};
+    private String zipFilePath ;
+    private String[] destDirectory = {"DATA","src/main/resources/Images"};
     public ImportBase(File path) {
         zipFilePath = String.valueOf(path);
         try {

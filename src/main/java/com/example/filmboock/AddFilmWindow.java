@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 //id image name year genre description actor collection
 public class AddFilmWindow {
     Base base = new Base();
-    private static final String PATH_IMAGE = "DATA/Images/";
+    private static final String PATH_IMAGE = "src/main/resources/Images/";
     Button imgButton = new Button(Lang.ADD_BUTTON_IMAGE);
     TextField nameText = new TextField();
     TextField yearText = new TextField();

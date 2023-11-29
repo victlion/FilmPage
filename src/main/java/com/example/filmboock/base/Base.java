@@ -8,18 +8,15 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Base {
-    private final static String PATH_DATA = "DATA/base.json";
-    private final static String PATH_GENRE = "DATA/genre.json";
-    private final static String PATH_YEAR = "DATA/year.json";
-    private final static String PATH_ACTOR = "DATA/actor.json";
-    private final static String PATH_COLLECTION = "DATA/collection.json";
+    private final static String PATH_DATA = "src/main/resources/base.json";
+    private final static String PATH_GENRE = "src/main/resources/genre.json";
+    private final static String PATH_YEAR = "src/main/resources/year.json";
+    private final static String PATH_ACTOR = "src/main/resources/actor.json";
+    private final static String PATH_COLLECTION = "src/main/resources/collection.json";
     private List<Film> filmList = new ArrayList<>();
     private Map<String, String> genreList = new HashMap<>();
     private Map<String, String> actorList = new HashMap<>();
